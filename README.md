@@ -27,10 +27,3 @@ So far it has the dialogue from the 14 first episodes of the show (Gem Glow to L
 *	HTTP::Request
 *	LWP::UserAgent
 *	JSON::XS
-
-## To-do list (in order of priority)
-*	Make Perl bindings for Markovify if I can (for some reason String::Markov doesn't work)
-*	Manually queue some posts generated with Markovify in the meanwhile
-*	At least somewhat change the theme of the blog
-*	Make a text file with all the OAuth parameters for the script to open and get them from because it sucks to have to copy the code and remove them everytime I make a commit
-*	Complete shitpost_database
