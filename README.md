@@ -15,7 +15,7 @@ For obvious reasons I removed the OAuth parameters from the code.
 
 ### shitpost_database
 This is all the dialogue that Pearl ever says for the Markov Chain to generate sentences from.<br/>
-So far it has the dialogue from the 31 first episodes of the show (Gem Glow to Lion 3: Straight to Video) and the dialogue from Hit the Diamond. Feel free to help me complete it! (it's really boring)<br/>
+So far it has the dialogue from the 31 first episodes of the show (Gem Glow to Warp Tour) and the dialogue from Hit the Diamond. Feel free to help me complete it! (it's really boring)<br/>
 I get it from the Steven Universe wikia and also each sentence is on its own line!
 
 ## Dependencies
