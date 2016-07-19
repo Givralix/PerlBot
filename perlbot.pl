@@ -44,6 +44,7 @@ sub posting_text {
 			extra_params => {
 				'type' => 'text',
 				'body' => $body,
+				'tags' => 'random thought,PerlBot',
 		},);
 	$request->sign;
 	my $ua = LWP::UserAgent->new;
