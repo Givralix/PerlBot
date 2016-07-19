@@ -5,6 +5,7 @@ $Net::OAuth::PROTOCOL_VERSION = Net::OAuth::PROTOCOL_VERSION_1_0A;
 use HTTP::Request::Common;
 use LWP::UserAgent;
 use JSON::XS;
+use Inline::Python;
 use strict;
 
 ##### FUNCTIONS
@@ -53,8 +54,20 @@ sub posting_text {
 	}
 	return;
 }
+# generating a sentence with markovify
+sub markov_sentence {
+	open my $f, "<", "shitpost_database"
+		or die "Couldn't open shitpost_database: $!";
+	my @text = <$f>;
+	my $text_model = Inline::Python->NewlineText(@text);
+	my $body = "<html><p>$text_model->make_sentence(tries => 100)</p></html>";
+	return $body;
+}
 
 my $blog = 'perlbot.tumblr.com';
-my $body = 'test';
-# authentifying
+my $body = markov_sentence();
+
 posting_text($blog, $body);
+__END__
+__Python__
+from markovify import NewlineText, make_sentence 

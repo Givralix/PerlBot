@@ -27,3 +27,4 @@ I get it from the Steven Universe wikia and also each sentence is on its own lin
 *	HTTP::Request
 *	LWP::UserAgent
 *	JSON::XS
+*	Inline::Python
