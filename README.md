@@ -17,7 +17,7 @@ Now actually works \o/
 
 ### shitpost_database
 This is all the dialogue that Pearl ever says for the Markov Chain to generate sentences from.<br/>
-So far it has the dialogue from the 31 first episodes of the show (Gem Glow to Alone Together) and the dialogue from Hit the Diamond. Feel free to help me complete it! (it's really boring)<br/>
+So far it has the dialogue from the 31 first episodes of the show (Gem Glow to Log Date 7 15 2) and the dialogue from Hit the Diamond. Feel free to help me complete it! (it's really boring)<br/>
 I get it from the Steven Universe wikia and also each sentence is on its own line!
 
 ## Dependencies
