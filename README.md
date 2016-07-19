@@ -12,7 +12,7 @@ Now removed
 ### test1.pl
 This is basically most of the code for the bot.<br/>
 Since there's no Tumblr API for Perl, I got the code for posting text posts from [this person](https://txlab.wordpress.com/2011/09/03/using-tumblr-api-v2-from-perl/#comment-7004) (which thankfully works).<br/>
-For obvious reasons I removed the OAuth parameters from the code.<br/>
+For obvious reasons I removed the OAuth parameters from the code (they're in a text file named "tokens", using a ";" as separation and there's no end of line character at the end).<br/>
 Now actually works \o/
 
 ### shitpost_database

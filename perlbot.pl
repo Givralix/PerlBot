@@ -14,7 +14,7 @@ def generate_sentence():
 
 	text_model = markovify.NewlineText(text)
 	
-	return text_model.make_sentence()
+	return text_model.make_sentence(tries=100)
 END
 use strict;
 
