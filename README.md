@@ -1,17 +1,19 @@
 # PerlBot
-This is a tumblr bot mainly written in Perl! So far it's not complete at all but I'm working on it.<br/>
+This is a tumblr bot mainly written in Perl (and some Python)! So far it's not complete at all but I'm working on it.<br/>
 It's based on Pearl from Steven Universe :D<br/>
 The blog is at [http://perlbot.tumblr.com/](http://perlbot.tumblr.com/)
 
 ## Files
 ### markov_chain.py
 This is a Python program that generates 8 sentences using a Markov Chain library (Markovify) and the "shitpost_database" text file.<br/>
-I'm more fluent in Python than Perl but the Tumblr API only works with Python 2 and I hate it. Also I can't write a Pearl bot in Python when there's a language named Perl out there.
+I'm more fluent in Python than Perl but the Tumblr API only works with Python 2 and I hate it. Also I can't write a Pearl bot in Python when there's a language named Perl out there.<br/>
+Now removed
 
 ### test1.pl
 This is basically most of the code for the bot.<br/>
 Since there's no Tumblr API for Perl, I got the code for posting text posts from [this person](https://txlab.wordpress.com/2011/09/03/using-tumblr-api-v2-from-perl/#comment-7004) (which thankfully works).<br/>
-For obvious reasons I removed the OAuth parameters from the code.
+For obvious reasons I removed the OAuth parameters from the code.<br/>
+Now actually works \o/
 
 ### shitpost_database
 This is all the dialogue that Pearl ever says for the Markov Chain to generate sentences from.<br/>
