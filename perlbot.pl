@@ -65,15 +65,6 @@ sub posting_text {
 	}
 	return;
 }
-# generating a sentence with markovify
-#sub markov_sentence {
-#	open my $f, "<", "shitpost_database"
-#		or die "Couldn't open shitpost_database: $!";
-#	my @text = <$f>;
-#	my $text_model = markovify::NewlineText(@text);
-#	my $body = "<html><p>$text_model->make_sentence(tries => 100)</p></html>";
-#	return $body;
-#}
 
 my $blog = 'perlbot.tumblr.com';
 my $body = generate_sentence();
