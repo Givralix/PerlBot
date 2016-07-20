@@ -30,7 +30,7 @@ my %request_params =
 			'token' => $tokens[2],
 			'token_secret' => $tokens[3],
 			'signature_method' => 'HMAC-SHA1',
-			request_method => 'POST',);
+		);
 
 ##### FUNCTIONS
 # queueing text posts
@@ -44,6 +44,7 @@ sub queueing_text {
 		Net::OAuth->request("protected resource")->new
 			(request_url => $url,
 			%request_params,
+			request_method => 'POST',
 			timestamp => time(),
 			nonce => rand(1000000),
 			extra_params => {
@@ -70,6 +71,11 @@ sub queueing_text {
 	}
 	return;
 }
+# reblogging a random textpost from my personal blog as private (will reblog random textpost from dashboard later)
+sub reblogging {
+	my($comment) = $_[0]; # whatever comment i add to the post
+	my $request_params = %{ $_[1] };
+
 
 my $blog = 'perlbot.tumblr.com';
 my $body = generate_sentence();
