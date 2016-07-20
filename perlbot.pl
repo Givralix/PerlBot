@@ -33,42 +33,6 @@ my %request_params =
 			request_method => 'POST',);
 
 ##### FUNCTIONS
-# posting text function
-sub posting_text {
-	my($blog) = $_[0];
-	my($body) = $_[1];
-	my(%request_params) = { $_[2] };
-	utf8::decode($body);
-	my $url = 'http://api.tumblr.com/v2/blog/' . $blog . '/post';
-	my $request =
-		Net::OAuth->request("protected resource")->new
-			(request_url => $url,
-			%request_params,
-			timestamp => time(),
-			nonce => rand(1000000),
-			extra_params => {
-				'type' => 'text',
-				'body' => $body,
-				'tags' => 'random thought,PerlBot',
-		},);
-	$request->sign;
-	my $ua = LWP::UserAgent->new;
-	my $response = $ua->request(POST $url, Content => $request->to_post_body);
-	my $date = localtime();
-	if ( $response->is_success ) {
-		my $r = decode_json($response->content);
-		if($r->{'meta'}{'status'} == 201) {
-			print "[$date] Following tumblr entry added:\n$body\n";
-		} else {
-			printf("[$date] Cannot create Tumblr entry: %s\n",
-				$r->{'meta'}{'msg'});
-		}
-	} else {
-	printf("[$date] Cannot create Tumblr entry: %s\n",
-			$response->as_string);
-	}
-	return;
-}
 # queueing text posts
 sub queueing_text {
 	my($blog) = $_[0];
