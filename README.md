@@ -3,6 +3,12 @@ This is a tumblr bot mainly written in Perl (and some Python)! So far it's not c
 It's based on Pearl from Steven Universe :D<br/>
 The blog is at [http://perlbot.tumblr.com/](http://perlbot.tumblr.com/)
 
+## Branches
+### master
+This branch is stable and has the code I use for posting posts most of the time
+### new_stuff
+This branch isn't stable at all, I use it to test stuff so the code isn't usable for the blog
+
 ## Files
 ### perlbot.pl
 This is basically most of the code for the bot.<br/>
