@@ -71,6 +71,38 @@ sub queueing_text {
 	}
 	return;
 }
+# getting asks (or die trying)
+sub getting_answers {
+	my($blog) = $_[0];
+	my $request_params = %{ $_[1] };
+	my $url = 'http://api.tumblr.com/v2/blog/' . $blog . '/posts/submission';
+	my $request =
+		Net::OAuth->request("protected resource")->new
+			(request_url => $url,
+			%request_params,
+			request_method => 'GET',
+			timestamp => time(),
+			nonce => rand(1000000),
+		,);
+	$request->sign;
+	my $ua = LWP::UserAgent->new;
+	my $response = $ua->request(GET $url, $request->to_get_body);
+	my $date = localtime();
+	if ( $response->is_success ) {
+		my $r = decode_json($response->content);
+		if($r->{'meta'}{'status'} == 201) {
+			print "[$date] Following tumblr entry queued\n";
+		} else {
+			printf("[$date] Cannot create Tumblr entry: %s\n",
+				$r->{'meta'}{'msg'});
+		}
+	} else {
+	printf("[$date] Cannot create Tumblr entry: %s\n",
+			$response->as_string);
+	}
+	return $response;
+}
+
 # reblogging a random textpost from my personal blog as private (will reblog random textpost from dashboard later)
 sub reblogging {
 	my($comment) = $_[0]; # whatever comment i add to the post
