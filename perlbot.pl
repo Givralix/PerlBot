@@ -7,12 +7,32 @@ use LWP::UserAgent;
 use JSON::XS;
 use Inline Python => <<'END';
 import markovify
+import random
 
 def generate_sentence():
 	with open("shitpost_database",'r',) as f:
 		text = f.read()
-
+	
 	text_model = markovify.NewlineText(text)
+	
+	return text_model.make_sentence(tries=100)
+
+def generate_answer(question):
+	with open("shitpost_database",'r',) as f:
+		text = list(f)
+	
+	sentences = []
+	for i in range(10):
+		number = random.randint(0,len(text))
+		if sentences.count(text[number]) == 0:
+			sentences.append(text[number])
+		else:
+			i == i - 1
+			continue
+	for i in range(len(question)):
+		sentences.append(question[i])
+
+	text_model = markovify.NewlineText(sentences)
 	
 	return text_model.make_sentence(tries=100)
 END
@@ -107,9 +127,10 @@ sub getting_answers {
 sub reblogging {
 	my($comment) = $_[0]; # whatever comment i add to the post
 	my $request_params = %{ $_[1] };
-
+}
 
 my $blog = 'perlbot.tumblr.com';
 my $body = generate_sentence();
+my @question = ['hey minnie!','Pearl is a lesbian just like you!','hi thegaypanic','this is a certain thing.'];
 
-queueing_text($blog, $body, \%request_params);
+print generate_answer(@question);
