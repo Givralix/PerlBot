@@ -30,7 +30,7 @@ my %request_params =
 			'token' => $tokens[2],
 			'token_secret' => $tokens[3],
 			'signature_method' => 'HMAC-SHA1',
-			request_method => 'POST',);
+		);
 
 ##### FUNCTIONS
 # queueing text posts
@@ -46,6 +46,7 @@ sub queueing_text {
 			%request_params,
 			timestamp => time(),
 			nonce => rand(1000000),
+			request_method => 'POST',
 			extra_params => {
 				'type' => 'text',
 				'body' => $body,
@@ -74,4 +75,4 @@ sub queueing_text {
 my $blog = 'perlbot.tumblr.com';
 my $body = generate_sentence();
 
-queueing_text($blog, $body, \%request_params);
+print queueing_text($blog, $body, \%request_params) . "\n";
