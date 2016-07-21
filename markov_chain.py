@@ -7,10 +7,10 @@ def generate_answer(question):
 
 	sentences = []
 	for i in range(10):
-		number = random.randint(0,len(text))
+		sentences.append(text[random.randint(0,len(text))-1])
 	for i in range(len(question)):
 		sentences.append(question[i])
-	
+	print(sentences)
 	text = ''
 
 	for i in range(len(sentences)):
@@ -19,4 +19,4 @@ def generate_answer(question):
 	text_model = markovify.NewlineText(text)
 	
 	return text_model.make_sentence(tries=100)
-print(generate_answer(['hey minnie!','Pearl is a lesbian just like you!','hi thegaypanic','this is a certain thing.']))
+print(generate_answer(["You know who's an awesome bisexual?", 'Pearl from Steven Universe!','hi meowstic-seer','pearl is lesbian.']))
