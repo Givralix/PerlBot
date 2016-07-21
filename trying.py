@@ -1,9 +1,11 @@
 import markovify
 import random
+import textblob
 
 def generate_answer(question):
 	f = open('shitpost_database', 'r')
-	text = list(f) 
+	text = list(f)
+	f.close()
 
 	sentences = []
 	for i in range(10):
@@ -19,4 +21,9 @@ def generate_answer(question):
 	text_model = markovify.NewlineText(text)
 	
 	return text_model.make_sentence(tries=100)
-print(generate_answer(["You know who's an awesome bisexual?", 'Pearl from Steven Universe!','hi meowstic-seer','pearl is lesbian.']))
+
+with open('shitpost_database','r') as f:
+	text = f.read()
+tokens = nltk.word_tokenize(text)
+tagged = nltk.pos_tag(tokens)
+print(text.generate())
