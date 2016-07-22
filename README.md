@@ -22,9 +22,16 @@ This is all the dialogue that Pearl ever says for the Markov Chain to generate s
 So far it has the dialogue from all the episodes from Gem Glow to Steven Floats.<br/>
 I get it from the Steven Universe wikia and also each sentence is on its own line!
 
+### chat_database
+All the messages Perlbot got from the internet
+
+### trying.py
+Trying to make something that can generate answers from an answer
+
 ## Dependencies
 ### Python
 *	Markovify
+*	TextBlob
 
 ### Perl
 *	Net::OAuth

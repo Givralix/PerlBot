@@ -106,7 +106,7 @@ sub getting_answers {
 		,);
 	$request->sign;
 	my $ua = LWP::UserAgent->new;
-	my $response = $ua->request(GET $url, $request->to_get_body);
+	my $response = $ua->request(GET $url, Content => $request->to_post_body);
 	my $date = localtime();
 	if ( $response->is_success ) {
 		my $r = decode_json($response->content);
@@ -133,4 +133,4 @@ my $blog = 'perlbot.tumblr.com';
 my $body = generate_sentence();
 my @question = ['hey minnie!','Pearl is a lesbian just like you!','hi thegaypanic','this is a certain thing.'];
 
-print generate_answer(@question);
+print getting_answers($blog, \%request_params);

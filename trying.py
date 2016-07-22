@@ -4,7 +4,7 @@ import textblob
 
 def generate_answer(question):
 	f = open('shitpost_database', 'r')
-	text = list(f)
+	text = f.read().split("\n")
 	f.close()
 
 	sentences = []
@@ -13,17 +13,16 @@ def generate_answer(question):
 	for i in range(len(question)):
 		sentences.append(question[i])
 	print(sentences)
-	text = ''
+
+	wiki = []
+	for i in range(len(sentences)):
+		wiki.append(textblob.TextBlob(sentences[i]))
+		print(wiki[i].tags)
+	base_sentence = wiki[random.randint(0,10)]
+
+
 
 	for i in range(len(sentences)):
 		text += sentences[i] + '\n'
 
-	text_model = markovify.NewlineText(text)
-	
-	return text_model.make_sentence(tries=100)
-
-with open('shitpost_database','r') as f:
-	text = f.read()
-tokens = nltk.word_tokenize(text)
-tagged = nltk.pos_tag(tokens)
-print(text.generate())
+print(generate_answer(["skylar... pearl in a tux is really great and if you could see it your little robot lesbian heart would flutter.","Shadow yet love for learning how to use emojis seeing as how you.","tux?"]))
