@@ -38,4 +38,5 @@ Trying to make something that can generate answers from an answer
 *	HTTP::Request
 *	LWP::UserAgent
 *	JSON::XS
+*	WWW::Tumblr
 *	Inline::Python

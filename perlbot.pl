@@ -5,6 +5,7 @@ $Net::OAuth::PROTOCOL_VERSION = Net::OAuth::PROTOCOL_VERSION_1_0A;
 use HTTP::Request::Common;
 use LWP::UserAgent;
 use JSON::XS;
+use WWW::Tumblr;
 use Inline Python => <<'END';
 import markovify
 import random
@@ -44,14 +45,19 @@ my $file = <$f>;
 my @tokens = split(';', $file);
 close $f;
 
-my %request_params = 
-			('consumer_key' => $tokens[0],
-			'consumer_secret' => $tokens[1],
-			'token' => $tokens[2],
-			'token_secret' => $tokens[3],
-			'signature_method' => 'HMAC-SHA1',
-		);
+my $t = WWW::Tumblr->new(
+	'consumer_key' => $tokens[0],
+	'secret_key' => $tokens[1],
+	'token' => $tokens[2],
+	'token_secret' => $tokens[3],
+);
 
+my $blog = $t->blog('perlbot.tumblr.com');
+
+my %submissions = $blog->posts_submission;
+print $submissions{'id'};
+
+=pod
 ##### FUNCTIONS
 # queueing text posts
 sub queueing_text {
@@ -111,9 +117,9 @@ sub getting_answers {
 	my $message = GET  . $url . '?' . $request->normalized_message_parameters . 'Authorization' => $authorization_signature;
 	return $message;
 }
-
 my $blog = 'perlbot.tumblr.com';
 my $body = generate_sentence();
 my @question = ['hey minnie!','Pearl is a lesbian just like you!','hi thegaypanic','this is a certain thing.'];
 
 print getting_answers($blog, \%request_params);
+=cut
