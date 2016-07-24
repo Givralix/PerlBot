@@ -4,12 +4,18 @@ import textblob
 
 def generate_answer(question):
 	f = open('shitpost_database', 'r')
-	text = f.read().split("\n")
+	shitpost = f.read().split("\n")
+	f.close()
+	
+	f = open('chat_database', 'r')
+	chat = f.read().split("\n")
 	f.close()
 	
 	sentences = []
-	for i in range(10):
-		sentences.append(text[random.randint(0,len(text))-1])
+	for i in range(7):
+		sentences.append(shitpost[random.randint(0,len(shitpost)-1)])
+	for i in range(3):
+		sentences.append(chat[random.randint(0,len(chat)-1)])
 	for i in range(len(question)):
 		sentences.append(question[i])
 	
@@ -18,13 +24,17 @@ def generate_answer(question):
 		wiki.append(textblob.TextBlob(sentences[i]))
 	
 	# i use the tags from the base_sentence and words from the other sentences to make a new sentence
-	base_sentence = wiki[random.randint(0,10)].tags
+	random_int = random.randint(0,7)
+	base_sentence = wiki[random_int].tags
+	del wiki[random_int]
+	print(base_sentence)
+	print(wiki)
 	new_sentence = []
 	# tracking where we are in the sentence
 	a = 0
 	for i in range(len(wiki)):
 		for j in range(len(wiki[i].tags)):
-			if wiki[i].tags[j][1] == base_sentence[a][1] and random.randint(0,4) != 0:
+			if wiki[i].tags[j][1] == base_sentence[a][1]:
 				new_sentence.append(wiki[i].tags[j][0])
 				a += 1
 			if a == len(base_sentence): break
@@ -35,4 +45,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["Perl, I was wondering...","Do all Pearls use spears?","What are your opinions on this?"]))
+print(generate_answer(["Rose"]))
