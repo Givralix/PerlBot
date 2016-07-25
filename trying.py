@@ -28,7 +28,8 @@ def generate_answer(question):
 	base_sentence = wiki[random_int].tags
 	del wiki[random_int]
 	print(base_sentence)
-	print(wiki)
+	for i in range(len(wiki)):
+		print(wiki[i].tags)
 	new_sentence = []
 	# tracking where we are in the sentence
 	a = 0
@@ -45,4 +46,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["Rose"]))
+print(generate_answer(["it's over isn't it?"]))
