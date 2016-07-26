@@ -75,4 +75,4 @@ sub queueing_text {
 my $blog = 'perlbot.tumblr.com';
 my $body = generate_sentence();
 
-print queueing_text($blog, $body, \%request_params) . "\n";
+print queueing_text($blog, $body, \%request_params);
