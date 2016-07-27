@@ -46,4 +46,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["What is pearl?","Garnet i most bird that looks better and better lesbian lesbian."]))
+print(generate_answer(["what do you think of lapis"]))
