@@ -46,4 +46,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["what do you think of lapis"]))
+print(generate_answer(["Pearl will you punch me in the face?"]))

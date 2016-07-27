@@ -55,4 +55,4 @@ my $t = WWW::Tumblr->new(
 my $blog = $t->blog('perlbot.tumblr.com');
 
 my $submissions = $blog->posts_submission;
-print $submissions;
+print $submissions . "\n";
