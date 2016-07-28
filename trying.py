@@ -46,4 +46,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["pearl!","this is no time to be checking your blog!","we have to stop the cluster!"]))
+print(generate_answer(["The temple"]))

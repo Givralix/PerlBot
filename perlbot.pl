@@ -6,6 +6,7 @@ use HTTP::Request::Common;
 use LWP::UserAgent;
 use JSON::XS;
 use WWW::Tumblr;
+use Data::Dumper;
 use Inline Python => <<'END';
 import markovify
 import random
@@ -54,5 +55,6 @@ my $t = WWW::Tumblr->new(
 
 my $blog = $t->blog('perlbot.tumblr.com');
 
-my $info = $blog->info;
-print $info . "\n";
+my $submissions = $blog->posts_submission;
+my $test = Dumper($submissions);
+print $test;
