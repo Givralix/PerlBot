@@ -46,4 +46,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["The temple"]))
+print(generate_answer(["STEVEN"]))
