@@ -55,27 +55,10 @@ my $t = WWW::Tumblr->new(
 
 my $blog = $t->blog('perlbot.tumblr.com');
 
-my $submissions = $blog->posts_submission;
-
-# i bet im gonna come back here in a fuckton of time & cry over how bad this is
-my @test = split("\n                       },",Dumper($submissions));
-my @temp = ();
-my @asks = ({lol => "haha"});
-for(my $i = 0 ; $i <= $#test ; $i++)
+my @submissions = @{$blog->posts_submission->{posts}};
+my @asks = ();
+for(my $i = 0 ; $i <= $#submissions ; $i++)
 {
-	push(@temp, $test[$i] =~ /('(.*)' => '(.*)',)/mg);
-	push(@asks, {});
-	my $index = 0;
-	++ $index until $temp[$index] == "type";
-	$asks[$i]{"type"} = $temp[$index + 1];
-	if($asks[$i]{"type"} = "answer")
-	{
-		for(my $j = 0 ; $j <= $#temp ; $j++)
-		{
-			if($temp[$j] == "asking_name") {
-				$asks[$i]["asking_name"] = $temp[$j + 1];
-			}
-		}
-	}
+	push(@asks, %{ $submissions[$i] });
 }
-print Dumper(\@asks);
+print @asks;

@@ -56,4 +56,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["What do you think about jorts, Pearl?"]))
+print(generate_answer(["what's up"]))
