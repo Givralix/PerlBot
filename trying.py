@@ -33,17 +33,27 @@ def generate_answer(question):
 	new_sentence = []
 	# tracking where we are in the sentence
 	a = 0
-	for i in range(len(wiki)):
+	# tracking how many times it tried looking for words
+	done = 0
+	while i < len(wiki):
 		for j in range(len(wiki[i].tags)):
 			if wiki[i].tags[j][1] == base_sentence[a][1]:
 				new_sentence.append(wiki[i].tags[j][0])
 				a += 1
 			if a == len(base_sentence): break
-		if a == len(base_sentence): break
+		i += 1
+		if a == len(base_sentence):
+			break
+		elif i == len(wiki):
+			i = 0
+			done += 1
+		if done == 2:
+			break
+		print(i)
 	
 	result = ""
 	for i in range(len(new_sentence)):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["STEVEN"]))
+print(generate_answer(["What do you think about jorts, Pearl?"]))
