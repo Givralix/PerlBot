@@ -56,4 +56,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["what's up"]))
+print(generate_answer(["Lets do the timewarp again"]))
