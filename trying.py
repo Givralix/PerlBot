@@ -56,4 +56,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["Lets do the timewarp again"]))
+print(generate_answer(["what is the least painful way to kill yourself???"]))
