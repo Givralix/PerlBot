@@ -35,8 +35,8 @@ def generate_answer(question):
 		sentences.append(shitpost[random.randint(0,len(shitpost)-1)])
 	for i in range(3):
 		sentences.append(chat[random.randint(0,len(chat)-1)])
-	sentences.append(question[i])
-	
+	sentences.append(question)
+
 	wiki = []
 	for i in range(len(sentences)):
 		wiki.append(textblob.TextBlob(sentences[i]))
@@ -91,13 +91,13 @@ my $t = WWW::Tumblr->new(
 );
 
 # for the reblog function
-my %request_params = {
+my %request_params = (
 	'consumer_key' => $tokens[0],
 	'consumer_secret' => $tokens[1],
 	'token' => $tokens[2],
 	'token_secret' => $tokens[3],
 	'signature_method' => 'HMAC-SHA1',
-};
+);
 
 my $blog = $t->blog('perlbot.tumblr.com');
 
@@ -176,5 +176,4 @@ sub reblog {
 	return;
 }
 
-
-answer_asks($blog, /%request_params);
+answer_asks($blog, \%request_params);
