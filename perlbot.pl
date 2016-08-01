@@ -73,6 +73,8 @@ sub queueing_text {
 }
 
 my $blog = 'perlbot.tumblr.com';
-my $body = generate_sentence();
 
-print queueing_text($blog, $body, \%request_params);
+for(my $i = 0 ; $i < 50 ; $i++) {
+	my $body = generate_sentence();
+	print queueing_text($blog, $body, \%request_params);
+}
