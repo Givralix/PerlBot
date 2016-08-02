@@ -56,4 +56,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["are we gamers"]))
+print(generate_answer(["Pearl necklace"]))
