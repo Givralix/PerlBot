@@ -56,4 +56,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["You seem a bit distracted by the thought of Jasper."]))
+print(generate_answer(["JASPER"]))
