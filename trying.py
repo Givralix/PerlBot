@@ -56,4 +56,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["Training"]))
+print(generate_answer(["You are amazing"]))
