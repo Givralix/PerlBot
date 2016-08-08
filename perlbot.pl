@@ -143,6 +143,7 @@ sub reblog {
 	my $request_params = %{ $_[6] };
 	utf8::decode($comment);
 	my $url = 'http://api.tumblr.com/v2/blog/' . $name . '/post/reblog';
+	print $url . "\n";
 	my $request =
 		Net::OAuth->request("protected resource")->new
 			(request_url => $url,
