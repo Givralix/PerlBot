@@ -56,4 +56,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["R u ok"]))
+print(generate_answer(["Has anybody lost a pearl?","Who do you belong to?"]))

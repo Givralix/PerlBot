@@ -134,7 +134,6 @@ sub answer_asks
 
 # reblogging posts/answering asks (not in WWW::Tumblr so i have to make my own)
 sub reblog {
-	my $name = $_[0];
 	my $type = $_[1];
 	my $comment = $_[2];
 	my $id = $_[3];
@@ -142,11 +141,9 @@ sub reblog {
 	my $tags = $_[5];
 	my $request_params = %{ $_[6] };
 	utf8::decode($comment);
-	my $url = 'http://api.tumblr.com/v2/blog/' . $name . '/post/reblog';
-	print $url . "\n";
 	my $request =
 		Net::OAuth->request("protected resource")->new
-			(request_url => $url,
+			(request_url => 'http://api.tumblr.com/v2/blog/perlbot/post/reblog',
 			%request_params,
 			timestamp => time(),
 			nonce => rand(1000000),
@@ -158,9 +155,10 @@ sub reblog {
 				'id' => $id,
 				'reblog_key' => $reblog_key,
 		},);
+	print Dumper($request) . "\n";
 	$request->sign;
 	my $ua = LWP::UserAgent->new;
-	my $response = $ua->request(POST $url, Content => $request->to_post_body);
+	my $response = $ua->request(POST 'http://api.tumblr.com/v2/blog/perlbot/post/reblog', Content => $request->to_post_body);
 	my $date = localtime();
 	if ( $response->is_success ) {
 		my $r = decode_json($response->content);
