@@ -56,4 +56,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["Has anybody lost a pearl?","Who do you belong to?"]))
+print(generate_answer(["do you and amethyst form opal much nowadays?"]))
