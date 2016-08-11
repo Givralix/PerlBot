@@ -56,4 +56,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["do you and amethyst form opal much nowadays?"]))
+print(generate_answer(["If you could only save one, would you choose Garnet, Amethyst or Steven?"]))
