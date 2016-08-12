@@ -56,4 +56,4 @@ def generate_answer(question):
 		result += new_sentence[i] + " "
 	return result
 
-print(generate_answer(["maybe the real lesbian was the gays we made along the way"]))
+print(generate_answer(["Pearl, I need the truth.","Were you Pink Diamond's Pearl?"]))

@@ -6,6 +6,7 @@ use HTTP::Request::Common;
 use LWP::UserAgent;
 use WWW::Tumblr;
 use Data::Dumper;
+use JSON;
 use Inline Python => <<'END';
 import markovify
 import random
@@ -106,33 +107,50 @@ my $blog = $t->blog('perlbot.tumblr.com');
 sub answer_asks
 {
 	my $blog = $_[0];
-	my $request_params_hash = $_[1];
 	my @submissions = @{$blog->posts_submission->{posts}};
-	my @asks = ();
-	for(my $i = 0 ; $i <= $#submissions ; $i++) {
+	open my $f, "<", "answered_asks_ids"
+		or die "Could not open file 'answered_asks_ids' $!";
+	my @previous_ids = <$f>;
+	for (my $i = 0 ; $i <= $#previous_ids ; $i++) {
+		chop($previous_ids[$i]);
+	}
+	close $f;
+	my %previous_ids_hash = map { $_ => 1 } @previous_ids;
+	for (my $i = 0 ; $i <= $#submissions ; $i++) {
 		print "\nAsk #$submissions[$i]{id} sent by $submissions[$i]{asking_name} at $submissions[$i]{date}:\n$submissions[$i]{question}\n";
-		print "Answer it? (y/n) ";
-		my $answer = <STDIN>;
-		chop($answer);
-		if($answer eq "y") {
-			my $question = $submissions[$i]{question};
-			print $question;
-			my @answers = ();
-			for(my $j = 0 ; $j < 10 ; $j++) {
-				push(@answers, generate_answer($question));
-			}
-			print join("\n", @answers);
-			print "What answer do you choose? (0-9) ";
-			$answer = <STDIN>;
-			chop($answer);
-			$answer = $answer + 0;
-			print $answers[$answer] . "\n";
-			reblog('perlbot', 'answer', $answers[$answer], $submissions[$i]{id}, $submissions[$i]{reblog_key}, 'answer,PerlBot', $request_params_hash);
+
+		# checking if the ask was already answered
+		if (exists($previous_ids_hash{$submissions[$i]{id}})) {
+			print "Already answered.\n";
+			next;
 		}
+
+		my $answer = '';
+		while (42) {
+			$answer = generate_answer($submissions[$i]{question});
+			unless($answer eq '') {
+				last;
+			}
+		}
+		my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $submissions[$i]{question}</b><br/><br/>$answer";
+		print $body . "\n";
+		my $post = $blog->post(
+			type => 'text',
+			body => $body,
+			tags => "answer,PerlBot,$submissions[$i]{asking_name}",
+			state => 'private',
+		);
+		print Dumper($post) . "\n\n";
+		open($f, '>>', "chat_database") or die "Could not open file 'chat_database' $!";
+		say $f $submissions[$i]{question};
+		close $f;
+		open($f, '>>', "answered_asks_ids") or die "Could not open file 'answered_asks_ids' $!";
+		say $f $submissions[$i]{id};
+		close $f;
 	}
 }
 
-# reblogging posts/answering asks (not in WWW::Tumblr so i have to make my own)
+# reblogging posts (not in WWW::Tumblr so i have to make my own)
 sub reblog {
 	my $type = $_[1];
 	my $comment = $_[2];
@@ -163,13 +181,13 @@ sub reblog {
 	if ( $response->is_success ) {
 		my $r = decode_json($response->content);
 		if($r->{'meta'}{'status'} == 201) {
-			print "[$date] Successfully reblogged/answered and added: $comment\n";
+			print "[$date] Successfully reblogged and added: $comment\n";
 		} else {
-			printf("[$date] Couldn't reblog/answer: %s\n",
+			printf("[$date] Couldn't reblog: %s\n",
 				$r->{'meta'}{'msg'});
 		}
 	} else {
-	printf("[$date] Couldn't reblog/answer: %s\n",
+	printf("[$date] Couldn't reblog: %s\n",
 			$response->as_string);
 	}
 	return;
