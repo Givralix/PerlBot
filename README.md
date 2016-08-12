@@ -28,15 +28,20 @@ All the messages Perlbot got from the internet
 ### trying.py
 Trying to make something that can generate answers from an answer
 
+### answered\_asks\_ids
+The ids of asks that were already answered (since I don't know how to remove them from the inbox)
+
 ## Dependencies
 ### Python
 *	Markovify
 *	TextBlob
 
 ### Perl
+*	utf8
 *	Net::OAuth
-*	HTTP::Request
+*	HTTP::Request::Common
 *	LWP::UserAgent
 *	JSON::XS
 *	WWW::Tumblr
 *	Inline::Python
+*	Data::Dumper

@@ -6,7 +6,7 @@ use HTTP::Request::Common;
 use LWP::UserAgent;
 use WWW::Tumblr;
 use Data::Dumper;
-use JSON;
+use JSON::XS;
 use Inline Python => <<'END';
 import markovify
 import random
@@ -124,22 +124,23 @@ sub answer_asks
 			print "Already answered.\n";
 			next;
 		}
+		my $question = $submissions[$i]{question};
+		utf8::decode($question);
 
 		my $answer = '';
 		while (42) {
-			$answer = generate_answer($submissions[$i]{question});
+			$answer = generate_answer($question);
 			unless($answer eq '') {
 				last;
 			}
 		}
 		my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $submissions[$i]{question}</b><br/><br/>$answer";
 		print $body . "\n";
-		utf8::decode($body);
+		utf8::encode($body);
 		my $post = $blog->post(
 			type => 'text',
 			body => $body,
 			tags => "answer,PerlBot,$submissions[$i]{asking_name}",
-			state => 'private',
 		);
 		print Dumper($post) . "\n\n";
 		open($f, '>>', "chat_database") or die "Could not open file 'chat_database' $!";

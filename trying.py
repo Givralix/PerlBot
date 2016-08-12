@@ -3,6 +3,8 @@ import random
 import textblob
 
 def generate_answer(question):
+	#question = question.decode('UTF-8')
+
 	f = open('shitpost_database', 'r')
 	shitpost = f.read().split("\n")
 	f.close()
@@ -16,9 +18,8 @@ def generate_answer(question):
 		sentences.append(shitpost[random.randint(0,len(shitpost)-1)])
 	for i in range(3):
 		sentences.append(chat[random.randint(0,len(chat)-1)])
-	for i in range(len(question)):
-		sentences.append(question[i])
-	
+	sentences.append(question)
+
 	wiki = []
 	for i in range(len(sentences)):
 		wiki.append(textblob.TextBlob(sentences[i]))
@@ -49,11 +50,10 @@ def generate_answer(question):
 			done += 1
 		if done == 2:
 			break
-		print(i)
+		#print(i)
 	
 	result = ""
 	for i in range(len(new_sentence)):
 		result += new_sentence[i] + " "
 	return result
-
-print(generate_answer(["Pearl, I need the truth.","Were you Pink Diamond's Pearl?"]))
+print(generate_answer("lol"))
