@@ -103,7 +103,7 @@ my %request_params = (
 my $blog = $t->blog('perlbot.tumblr.com');
 
 ## MY FUNCTIONS
-# answering asks wizard
+# answering all asks in the inbox except already answered ones
 sub answer_asks
 {
 	my $blog = $_[0];
@@ -134,6 +134,7 @@ sub answer_asks
 		}
 		my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $submissions[$i]{question}</b><br/><br/>$answer";
 		print $body . "\n";
+		utf8::decode($body);
 		my $post = $blog->post(
 			type => 'text',
 			body => $body,
