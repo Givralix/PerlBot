@@ -19,7 +19,7 @@ Now actually works \o/
 
 ### shitpost_database
 This is all the dialogue that Pearl ever says for the Markov Chain to generate sentences from.<br/>
-So far it has the dialogue from all the episodes from Gem Glow to Steven Floats.<br/>
+So far it has the dialogue from all the episodes from Gem Glow to The Kindergarten Kid.<br/>
 I get it from the Steven Universe wikia and also each sentence is on its own line!
 
 ### chat_database
