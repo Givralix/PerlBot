@@ -19,16 +19,37 @@ Now actually works \o/
 
 ### shitpost_database
 This is all the dialogue that Pearl ever says for the Markov Chain to generate sentences from.<br/>
-So far it has the dialogue from all the episodes from Gem Glow to Steven Floats.<br/>
+So far it has the dialogue from all the episodes from Gem Glow to Know Your Fusion.<br/>
 I get it from the Steven Universe wikia and also each sentence is on its own line!
+
+### chat_database
+All the messages Perlbot got from the internet
+
+### trying.py
+Trying to make something that can generate answers from an answer (not to be used)
+
+### answered\_asks\_ids
+The ids of asks that were already answered (since I don't know how to remove them from the inbox)
+
+### hourly\_update\_script.sh
+The script that is run hourly.<br/>
+It:
+1.	Fetches the remote repository & merges
+2.	Runs perlbot.pl
+3.	Makes a commit of chat_database, answered\_asks\_ids and log
+4.	Pushes it
 
 ## Dependencies
 ### Python
 *	Markovify
+*	TextBlob
 
 ### Perl
+*	utf8
 *	Net::OAuth
-*	HTTP::Request
+*	HTTP::Request::Common
 *	LWP::UserAgent
 *	JSON::XS
+*	WWW::Tumblr
 *	Inline::Python
+*	Data::Dumper
