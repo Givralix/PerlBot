@@ -19,14 +19,14 @@ Now actually works \o/
 
 ### shitpost_database
 This is all the dialogue that Pearl ever says for the Markov Chain to generate sentences from.<br/>
-So far it has the dialogue from all the episodes from Gem Glow to The Kindergarten Kid.<br/>
+So far it has the dialogue from all the episodes from Gem Glow to Know Your Fusion.<br/>
 I get it from the Steven Universe wikia and also each sentence is on its own line!
 
 ### chat_database
 All the messages Perlbot got from the internet
 
 ### trying.py
-Trying to make something that can generate answers from an answer
+Trying to make something that can generate answers from an answer (not to be used)
 
 ### answered\_asks\_ids
 The ids of asks that were already answered (since I don't know how to remove them from the inbox)
