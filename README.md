@@ -31,6 +31,14 @@ Trying to make something that can generate answers from an answer
 ### answered\_asks\_ids
 The ids of asks that were already answered (since I don't know how to remove them from the inbox)
 
+### hourly\_update\_script.sh
+The script that is run hourly.<br/>
+It:
+1.	Fetches the remote repository & merges
+2.	Runs perlbot.pl
+3.	Makes a commit of chat_database, answered\_asks\_ids and log
+4.	Pushes it
+
 ## Dependencies
 ### Python
 *	Markovify

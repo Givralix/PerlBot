@@ -16,6 +16,9 @@ def generate_sentence():
 	with open("shitpost_database",'r',) as f:
 		text = f.read()
 	
+	with open("chat_database",'r',) as f:
+		text += f.read()
+	
 	text_model = markovify.NewlineText(text)
 	
 	return text_model.make_sentence(tries=100)
@@ -124,6 +127,13 @@ sub answer_asks
 			print "Already answered.\n";
 			next;
 		}
+
+		# checking if I should answer the ask instead of PerlBot
+		if (index($submissions[$i]{question}, "((") != -1) {
+			print "Ignored.\n";
+			next;
+		}
+
 		my $question = $submissions[$i]{question};
 		utf8::decode($question);
 
@@ -193,6 +203,19 @@ sub reblog {
 			$response->as_string);
 	}
 	return;
+}
+
+foreach (0..1) {
+	my $body = generate_sentence();
+	utf8::encode($body);
+	my $post = $blog->post(
+		type => 'text',
+		body => $body,
+		tags => "random thought,PerlBot",
+		state => "queue",
+	);
+	my $date = localtime();
+	print "[$date] Following tumblr entry queued: $body\n";
 }
 
 answer_asks($blog, \%request_params);
