@@ -7,6 +7,7 @@ use LWP::UserAgent;
 use WWW::Tumblr;
 use Data::Dumper;
 use JSON::XS;
+use HTML::Entities;
 use Inline Python => <<'END';
 import markovify
 import random
@@ -135,7 +136,7 @@ sub answer_asks
 		}
 
 		my $question = $submissions[$i]{question};
-		utf8::decode($question);
+		encode_entities($question);
 
 		my $answer = '';
 		while (42) {
@@ -146,7 +147,7 @@ sub answer_asks
 		}
 		my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $submissions[$i]{question}</b><br/><br/>$answer";
 		print $body . "\n";
-		utf8::encode($body);
+		encode_entities($body);
 		my $post = $blog->post(
 			type => 'text',
 			body => $body,
@@ -207,7 +208,7 @@ sub reblog {
 
 foreach (0..1) {
 	my $body = generate_sentence();
-	utf8::encode($body);
+	encode_entities($body);
 	my $post = $blog->post(
 		type => 'text',
 		body => $body,
