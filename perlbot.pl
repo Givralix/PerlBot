@@ -145,9 +145,9 @@ sub answer_asks
 				last;
 			}
 		}
-		my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $submissions[$i]{question}</b><br/><br/>$answer";
+		encode_entities($answer);
+		my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $question</b><br/><br/>$answer";
 		print $body . "\n";
-		encode_entities($body);
 		my $post = $blog->post(
 			type => 'text',
 			body => $body,
