@@ -56,4 +56,4 @@ def generate_answer(question):
 	for i in range(len(new_sentence)):
 		result += new_sentence[i] + " "
 	return result
-print(generate_answer("lol"))
+print(generate_answer("Don't swear Perl! Thats rude"))
