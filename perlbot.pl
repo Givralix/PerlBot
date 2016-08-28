@@ -14,11 +14,13 @@ import random
 import textblob
 
 def generate_sentence():
-	with open("shitpost_database",'r',) as f:
-		text = f.read()
+	f = open('shitpost_database', 'r')
+	text = f.read().split("\n")
+	f.close()
 	
-	with open("chat_database",'r',) as f:
-		text += f.read()
+	f = open('chat_database', 'r')
+	text += f.read().split("\n")
+	f.close()
 	
 	text_model = markovify.NewlineText(text)
 	
