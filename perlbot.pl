@@ -25,7 +25,10 @@ def generate_sentence():
 	return text_model.make_sentence(tries=100)
 
 def generate_answer(question):
-	question = question.decode('UTF-8')
+	try:
+		question = question.decode('UTF-8')
+	except AttributeError:
+		print("Could not decode the question")
 
 	f = open('shitpost_database', 'r')
 	shitpost = f.read().split("\n")
