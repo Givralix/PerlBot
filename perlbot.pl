@@ -151,13 +151,14 @@ sub answer_asks
 		}
 		encode_entities($answer);
 		my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $question</b><br/><br/>$answer";
-		print $body . "\n";
-		my $post = $blog->post(
-			type => 'text',
-			body => $body,
-			tags => "answer,PerlBot,$submissions[$i]{asking_name}",
-		);
-		print Dumper($post) . "\n\n";
+		my $date = localtime();
+		if ( my $post = $blog->post( type => 'text', body => $body, tags => "random thought,PerlBot,$submissions[$i]{asking_name}", ) ) {
+			print "[$date] Following tumblr entry posted: $body\n";
+		} else {
+			print STDERR Dumper $blog->error;
+			die "[$date] Couldn't post following tumblr entry: $body";
+		}
+
 		open($f, '>>', "chat_database") or die "Could not open file 'chat_database' $!";
 		say $f $submissions[$i]{question};
 		close $f;
@@ -213,14 +214,13 @@ sub reblog {
 foreach (0..1) {
 	my $body = generate_sentence();
 	encode_entities($body);
-	my $post = $blog->post(
-		type => 'text',
-		body => $body,
-		tags => "random thought,PerlBot",
-		state => "queue",
-	);
 	my $date = localtime();
-	print "[$date] Following tumblr entry queued: $body\n";
+	if ( my $post = $blog->post( type => 'text', body => $body, tags => "random thought,PerlBot", state => "queue", ) ) {
+		print "[$date] Following tumblr entry queued: $body\n";
+	} else {
+		print STDERR Dumper $blog->error;
+		die "[$date] Couldn't queue following tumblr entry: $body";
+	}
 }
 
 answer_asks($blog, \%request_params);
