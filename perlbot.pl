@@ -108,6 +108,7 @@ my %request_params = (
 );
 
 my $blog = $t->blog('perlbot.tumblr.com');
+die Dumper $blog->error unless $blog->info();
 
 ## MY FUNCTIONS
 # answering all asks in the inbox except already answered ones
