@@ -3,12 +3,10 @@
 # Hourly PerlBot Update #
 #########################
 
-date = ${date}
-log = $date" - log"
-rm -r /home/perlbot/PerlBot > /home/perlbot/log/$log
-cd /home/perlbot/ >> /home/perlbot/log/$log
-git clone https://github.com/Givralix/PerlBot.git >> /home/perlbot/log/$log
-perl /home/perlbot/PerlBot/perlbot.py >> /home/perlbot/log/$log
-cd /home/perlbot/PerlBot >> /home/perlbot/log/$log
-git add chat_database log >> /home/perlbot/log/$log
-git commit -m "updated the log and maybe chat_database" >> /home/perlbot/log/$log
+cd /home/bismuth/PerlBot
+git pull 
+perl perlbot.pl 
+cd /home/bismuth/PerlBot 
+git add chat_database answered_asks_ids 
+git commit -m "updated the log and maybe chat_database and answered_asks_ids" 
+git push 
