@@ -153,7 +153,7 @@ sub answer_asks
 		encode_entities($answer);
 		my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $question</b><br/><br/>$answer";
 		my $date = localtime();
-		if ( my $post = $blog->post( type => 'text', body => $body, tags => "random thought,PerlBot,$submissions[$i]{asking_name}", ) ) {
+		if ( my $post = $blog->post( type => 'text', body => $body, tags => "answer,PerlBot,$submissions[$i]{asking_name}", ) ) {
 			print "[$date] Following tumblr entry posted: $body\n";
 		} else {
 			print STDERR Dumper $blog->error;
