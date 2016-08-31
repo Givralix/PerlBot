@@ -88,6 +88,7 @@ use warnings;
 open my $f, "<", "tokens"
 	or die "Couldn't open token file: $!";
 my $file = <$f>;
+chop($file);
 my @tokens = split(';', $file);
 close $f;
 
