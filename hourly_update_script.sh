@@ -4,9 +4,9 @@
 #########################
 
 cd /home/bismuth/PerlBot
-git pull 
-perl perlbot.pl 
-cd /home/bismuth/PerlBot 
-git add chat_database answered_asks_ids 
-git commit -m "updated the log and maybe chat_database and answered_asks_ids" 
-git push 
+git pull
+perl perlbot.pl
+cd /home/bismuth/PerlBot
+git add chat_database answered_asks_ids
+git commit -m "updated the log and maybe chat_database and answered_asks_ids"
+git push
