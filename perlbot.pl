@@ -73,7 +73,7 @@ def generate_answer(question):
 		elif i == len(wiki):
 			i = 0
 			done += 1
-		if done == 2:
+		if done == 10:
 			break
 		#print(i)
 	
