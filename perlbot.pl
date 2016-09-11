@@ -50,9 +50,8 @@ def generate_answer(question):
 		wiki.append(textblob.TextBlob(sentences[i]))
 	
 	# i use the tags from the base_sentence and words from the other sentences to make a new sentence
-	random_int = random.randint(0,7)
-	base_sentence = wiki[random_int].tags
-	del wiki[random_int]
+	base_sentence = wiki[0].tags
+	del wiki[0]
 	print(base_sentence)
 	for i in range(len(wiki)):
 		print(wiki[i].tags)
