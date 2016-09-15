@@ -99,7 +99,6 @@ my $t = WWW::Tumblr->new(
 );
 
 # for the reblog function
-=for comment
 my %request_params = (
 	'consumer_key' => $tokens[0],
 	'consumer_secret' => $tokens[1],
@@ -107,7 +106,6 @@ my %request_params = (
 	'token_secret' => $tokens[3],
 	'signature_method' => 'HMAC-SHA1',
 );
-=cut
 
 my $blog = $t->blog('perlbot.tumblr.com');
 die Dumper $blog->error unless $blog->info();
@@ -171,7 +169,6 @@ sub answer_asks
 }
 
 # reblogging posts (not in WWW::Tumblr so i have to make my own)
-=for comment
 sub reblog {
 	my $type = $_[1];
 	my $comment = $_[2];
@@ -213,7 +210,6 @@ sub reblog {
 	}
 	return;
 }
-=cut
 
 foreach (0..1) {
 	my $body = generate_sentence();
