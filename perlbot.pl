@@ -25,10 +25,7 @@ def generate_sentence():
 	return text_model.make_sentence(tries=100)
 
 def generate_answer(question):
-	try:
-		question = question.decode('UTF-8')
-	except AttributeError:
-		print("Could not decode the question")
+	#question = question.decode('UTF-8')
 
 	f = open('shitpost_database', 'r')
 	shitpost = f.read().split("\n")
@@ -40,19 +37,20 @@ def generate_answer(question):
 	
 	sentences = []
 	for i in range(7):
-		sentences.append(shitpost[random.randint(0,len(shitpost)-1)])
+		sentences.append(random.choice(shitpost))
+
+	# i use the tags from the base_sentence and words from the other sentences to make a new sentence
+	base_sentence = textblob.TextBlob(random.choice(sentences))
+	sentences.remove(base_sentence)
 	for i in range(3):
-		sentences.append(chat[random.randint(0,len(chat)-1)])
+		sentences.append(random.choice(chat))
 	sentences.append(question)
 
 	wiki = []
 	for i in range(len(sentences)):
 		wiki.append(textblob.TextBlob(sentences[i]))
 	
-	# i use the tags from the base_sentence and words from the other sentences to make a new sentence
-	base_sentence = wiki[0].tags
-	del wiki[0]
-	print(base_sentence)
+	print("base_sentence:",base_sentence.tags)
 	for i in range(len(wiki)):
 		print(wiki[i].tags)
 	new_sentence = []
@@ -60,22 +58,20 @@ def generate_answer(question):
 	a = 0
 	# tracking how many times it tried looking for words
 	done = 0
-	while i < len(wiki):
+	while done < 2:
 		for j in range(len(wiki[i].tags)):
-			if wiki[i].tags[j][1] == base_sentence[a][1]:
-				new_sentence.append(wiki[i].tags[j][0])
-				a += 1
-			if a == len(base_sentence): break
+			try:
+				if wiki[i].tags[j][1] == base_sentence.tags[a][1]:
+					new_sentence.append(wiki[i].tags[j][0])
+					a += 1
+					if a == len(base_sentence.tags): break
+			except IndexError:
+				pass
 		i += 1
-		if a == len(base_sentence):
-			break
-		elif i == len(wiki):
+		if i == len(wiki):
 			i = 0
 			done += 1
-		if done == 10:
-			break
-		#print(i)
-	
+
 	result = ""
 	for i in range(len(new_sentence)):
 		result += new_sentence[i] + " "
