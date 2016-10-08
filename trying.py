@@ -55,4 +55,4 @@ def generate_answer(question):
 	for i in range(len(new_sentence)):
 		result += new_sentence[i] + " "
 	return result
-print(generate_answer("Hey, We Love Your Page So We Would Like To Invite You To Our Special FREE Bong Promo! To Enter Visit Our Link On Our Tumblr Profile To Get A Bong FREE OF-CHARGE! Promo End In 3 Weeks."))
+print(generate_answer("you're rude."))
