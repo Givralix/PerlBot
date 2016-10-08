@@ -12,20 +12,10 @@ use Inline Python => <<'END';
 import markovify
 import random
 import textblob
-
-def generate_sentence():
-	with open("shitpost_database",'r',) as f:
-		text = f.read()
-	
-	with open("chat_database",'r',) as f:
-		text += f.read()
-	
-	text_model = markovify.NewlineText(text)
-	
-	return text_model.make_sentence(tries=100)
+import time
 
 def generate_answer(question):
-	#question = question.decode('UTF-8')
+	question = question.decode('UTF-8')
 
 	f = open('shitpost_database', 'r')
 	shitpost = f.read().split("\n")
@@ -76,6 +66,18 @@ def generate_answer(question):
 	for i in range(len(new_sentence)):
 		result += new_sentence[i] + " "
 	return result
+
+def generate_sentence():
+	with open("shitpost_database",'r',) as f:
+		text = f.read()
+	
+	with open("chat_database",'r',) as f:
+		text += f.read()
+	
+	text_model = markovify.NewlineText(text)
+	
+	return text_model.make_sentence(tries=100)
+
 END
 use strict;
 use warnings;
