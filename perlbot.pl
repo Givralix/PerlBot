@@ -148,7 +148,12 @@ sub answer_asks
 			}
 		}
 		encode_entities($answer);
-		my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $question</b><br/><br/>$answer";
+                if(\@$submissions[$i]{asking_name} == "tahtcat") {
+		my $body = "<a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a><b> fuck off</b>";
+my $post = $blog->post( type => 'text', body => $body, tags => "the mods speaks,note: i am currently unable to login,so perl is sending this for me, have fun being blocked in a few hours"); }
+                else {
+my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $question</b><br/><br/>$answer";
+
 		my $date = localtime();
 		if ( my $post = $blog->post( type => 'text', body => $body, tags => "answer,PerlBot,$submissions[$i]{asking_name}", ) ) {
 			print "[$date] Following tumblr entry posted: $body\n";
@@ -162,7 +167,7 @@ sub answer_asks
 		close $f;
 		open($f, '>>', "answered_asks_ids") or die "Could not open file 'answered_asks_ids' $!";
 		say $f $submissions[$i]{id};
-		close $f;
+		close $f;}
 	}
 }
 
