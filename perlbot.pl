@@ -15,7 +15,10 @@ import textblob
 import time
 
 def generate_answer(question):
-	question = question.decode('UTF-8')
+	try:
+		question = question.decode('UTF-8')
+	except AttributeError:
+		pass
 
 	f = open('shitpost_database', 'r')
 	shitpost = f.read().split("\n")
