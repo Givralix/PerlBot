@@ -55,4 +55,3 @@ def generate_answer(question):
 	for i in range(len(new_sentence)):
 		result += new_sentence[i] + " "
 	return result
-print(generate_answer("STAND AND FIGHT YOU PILE OF SCRAP."))
