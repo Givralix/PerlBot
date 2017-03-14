@@ -19,7 +19,7 @@ close $f;
 chomp($file);
 my @tokens = split(';', $file);
 
-my $blog = WWW::Tumblr->new(
+my $blog = WWW::Tumblr::Blog->new(
 	'consumer_key' => $tokens[0],
 	'secret_key' => $tokens[1],
 	'token' => $tokens[2],
@@ -72,7 +72,7 @@ sub answer_asks
 				last; # break out
 			}
 		}
-		# make the question html safe
+		# make the answer html safe
 		encode_entities($answer);
 		my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $question</b><br/><br/>$answer";
 		my $date = localtime();

@@ -55,3 +55,15 @@ def generate_answer(question):
 	for i in range(len(new_sentence)):
 		result += new_sentence[i] + " "
 	return result
+
+def generate_sentence():
+	with open("shitpost_database",'r',) as f:
+		text = f.read()
+	
+	with open("chat_database",'r',) as f:
+		text += f.read()
+	
+	text_model = markovify.NewlineText(text)
+	
+	return text_model.make_sentence(tries=100)
+

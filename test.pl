@@ -19,7 +19,7 @@ chop($file);
 my @tokens = split(';', $file);
 close $f;
 
-my $blog = WWW::Tumblr->new(
+my $blog = WWW::Tumblr::Blog->new(
 	'consumer_key' => $tokens[0],
 	'secret_key' => $tokens[1],
 	'token' => $tokens[2],
@@ -27,8 +27,5 @@ my $blog = WWW::Tumblr->new(
 	'base_hostname' => 'perlbot.tumblr.com',
 );
 
-die Dumper($blog->error) unless $blog->info();
-
-my $post = $blog->post(
-	type => 'text',
-);
+my @submissions = @{$blog->posts_submission->{posts}};
+print @submissions . "\n";
