@@ -8,6 +8,7 @@ use WWW::Tumblr;
 use Data::Dumper;
 use JSON::XS;
 use HTML::Entities;
+use String::Markov;
 
 use strict;
 use warnings;
@@ -27,5 +28,17 @@ my $blog = WWW::Tumblr::Blog->new(
 	'base_hostname' => 'perlbot.tumblr.com',
 );
 
-my @submissions = @{$blog->posts_submission->{posts}};
-print @submissions . "\n";
+#my @submissions = @{$blog->posts_submission->{posts}};
+#print @submissions . "\n";
+sub generate_sentence {
+	my $markov = String::Markov
+	with open("shitpost_database",'r',) as f:
+		text = f.read()
+	
+	with open("chat_database",'r',) as f:
+		text += f.read()
+	
+	text_model = markovify.NewlineText(text)
+	
+	return text_model.make_sentence(tries=100)
+}
