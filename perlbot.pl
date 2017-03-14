@@ -15,9 +15,9 @@ use warnings;
 open my $f, "<", "tokens"
 	or die "Couldn't open token file: $!";
 my $file = <$f>;
-chop($file);
-my @tokens = split(';', $file);
 close $f;
+chomp($file);
+my @tokens = split(';', $file);
 
 my $blog = WWW::Tumblr->new(
 	'consumer_key' => $tokens[0],
@@ -29,14 +29,14 @@ my $blog = WWW::Tumblr->new(
 
 die Dumper($blog->error) unless $blog->info();
 
-# for the reblog function (unused)
-#my %request_params = (
-#	'consumer_key' => $tokens[0],
-#	'consumer_secret' => $tokens[1],
-#	'token' => $tokens[2],
-#	'token_secret' => $tokens[3],
-#	'signature_method' => 'HMAC-SHA1',
-#);
+# for the ask function (used) and reblog function (unused)
+my %request_params = (
+	'consumer_key' => $tokens[0],
+	'consumer_secret' => $tokens[1],
+	'token' => $tokens[2],
+	'token_secret' => $tokens[3],
+	'signature_method' => 'HMAC-SHA1',
+);
 
 ## MY FUNCTIONS
 # answering all asks in the inbox except already answered ones
