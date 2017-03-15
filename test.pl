@@ -81,5 +81,4 @@ sub generate_sentence {
 	}
 	return $sentence;
 }
-print $forbidden_sentences{"Hey, Steven..."} . "\n";
 print generate_sentence($markov, \%forbidden_sentences) . "\n";
