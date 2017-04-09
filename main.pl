@@ -20,6 +20,40 @@ my $blog = WWW::Tumblr::Blog->new(
 
 die Dumper($blog->error) unless $blog->info();
 
+my $markov = String::Markov->new(
+		order => 2,
+		sep => '',
+		split_sep => ' ',
+		join_sep => ' ',
+		null => "\0",
+		stable => 1,
+		normalize => undef,
+		do_chomp => 1,
+);
+
+my @files = (
+	"show_dialogue.txt",
+	"blog_dialogue.txt",
+);
+
+$markov->add_files(@files);
+
+open $f, $files[0] or die "couldn't open 'show_dialogue.txt': $!";
+my @show_dialogue = <$f>;
+close FILE;
+
+open $f, $files[1] or die "couldn't open 'blog_dialogue.txt': $!";
+my @blog_dialogue = <$f>;
+close FILE;
+
+chomp(@show_dialogue);
+chomp(@blog_dialogue);
+
+my %forbidden_sentences;
+$forbidden_sentences{$_} = 1 for @show_dialogue;
+$forbidden_sentences{$_} = 1 for @blog_dialogue;
+
 for (0..1) {
-	queue_post($blog);
+	my $sentence = generate_sentence($markov, \%forbidden_sentences);
+	queue_post($blog, $sentence);
 }
