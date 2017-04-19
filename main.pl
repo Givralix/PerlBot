@@ -1,8 +1,5 @@
 require "perlbot.pl";
 
-use strict;
-use warnings;
-
 open my $f, "<", "tokens"
 	or die "Couldn't open token file: $!";
 my $file = <$f>;
