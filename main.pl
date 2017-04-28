@@ -24,7 +24,7 @@ my $markov = String::Markov->new(
 		join_sep => ' ',
 		null => "\0",
 		stable => 1,
-		normalize => undef,
+		normalize => 'D',
 		do_chomp => 1,
 );
 

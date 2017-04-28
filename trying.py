@@ -1,4 +1,3 @@
-import markovify
 import random
 import textblob
 import time
@@ -6,11 +5,11 @@ import time
 def generate_answer(question):
 	#question = question.decode('UTF-8')
 
-	f = open('shitpost_database', 'r')
+	f = open('show_dialogue.txt', 'r')
 	shitpost = f.read().split("\n")
 	f.close()
 	
-	f = open('chat_database', 'r')
+	f = open('blog_dialogue.txt', 'r')
 	chat = f.read().split("\n")
 	f.close()
 	
@@ -67,3 +66,4 @@ def generate_sentence():
 	
 	return text_model.make_sentence(tries=100)
 
+generate_answer("someone: Pearl me, an intellectual: mm whatcha say");

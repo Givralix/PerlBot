@@ -75,12 +75,4 @@ sub generate_sentence {
 	}
 	return $sentence;
 }
-#print generate_sentence($markov, \%forbidden_sentences) . "\n";
-
-my $tagger = new Lingua::EN::Tagger;
-
-my $xml = $tagger->add_tags("If there were lesbians that were incubated here 6,000 years ago!");
-
-my @tagged_text = YAX::Parser->tokenize($xml);
-
-print Dumper @tagged_text . "\n";
+print generate_sentence($markov, \%forbidden_sentences) . "\n";
