@@ -12,6 +12,7 @@ use String::Markov;
 use Lingua::EN::Tagger;
 use XML::LibXML;
 srand;
+use File::Random qw/random_line/;
 #use YAX::Parser;
 
 use strict;
@@ -78,15 +79,29 @@ sub generate_sentence {
 }
 #print generate_sentence($markov, \%forbidden_sentences) . "\n";
 
+
 sub generate_answer {
-	my $xml = $_[0];
-	my $base_sentence = $_[1];
-	my $question = $_[2];
+	my $p = $_[0]; # Lingua::EN::Tagger object
+	my $question = $_[1];
+
+	my @sentences = random_line("show_dialogue.txt", 7);
+	push(@sentences, random_line("blog_dialogue.txt", 3));
+
+	my $text = XML::LibXML->load_xml( string => "<base>" . $p->add_tags(join('', @sentences, $question)) . "</base>");
+	my $base_sentence = XML::LibXML->load_xml( string => "<base>" . $p->add_tags($sentences[6]) . "</base>" );
+
 	my $answer = '';
 
 	foreach my $tag ($base_sentence->findnodes('/base/*')) {
 		my $nodeName = $tag->nodeName . "\n";
-		my $word = $xml->findnodes("/base/$nodeName")->[0]->to_literal();
+		my $word = "";
+
+		eval {
+			$word = $text->findnodes("/base/$nodeName")->[0]->to_literal();
+		};
+		if ($@) {
+			warn "Skipping word\n";
+		}
 		if ($answer eq '') {
 			$answer = $word;
 		} else {
@@ -125,3 +140,5 @@ foreach my $tag ($base_sentence->findnodes('/base/*')) {
 }
 
 print $sentence . "\n";
+
+print generate_answer($p, "Do you like cats?");
