@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 require "perlbot.pl";
 
 open my $f, "<", "tokens"
@@ -24,7 +25,7 @@ my $markov = String::Markov->new(
 		join_sep => ' ',
 		null => "\0",
 		stable => 1,
-		do_normalize => '',
+		normalize => '',
 		do_chomp => 1,
 );
 
@@ -56,5 +57,3 @@ for (0..1) {
 	my $sentence = generate_sentence($markov, \%forbidden_sentences);
 	queue_post($blog, $sentence);
 }
-
-generate_answer($p, "text text text");

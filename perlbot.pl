@@ -114,10 +114,7 @@ sub generate_answer {
 
 		eval {
 			$word = $text->findnodes("/base/$nodeName")->[0]->to_literal();
-			print Dumper(\$text->findnodes("/base/$nodeName"));
-            :q
-            :q
-            :q
+			delete $text->findnodes("/base/$nodeName");
 		};
 		if ($@) {
 			warn "Skipping word\n";
