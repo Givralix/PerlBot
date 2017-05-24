@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 use utf8;
+binmode STDOUT, ':utf8';
 #use Net::OAuth;
 #$Net::OAuth::PROTOCOL_VERSION = Net::OAuth::PROTOCOL_VERSION_1_0A;
 #use HTTP::Request::Common;
@@ -84,12 +85,15 @@ sub generate_answer {
 	my $p = $_[0]; # Lingua::EN::Tagger object
 	my $question = $_[1];
 
-	my @sentences = random_line("show_dialogue.txt", 7);
-	push(@sentences, random_line("blog_dialogue.txt", 3));
+	my @sentences = random_line("show_dialogue.txt", 3);
+	push(@sentences, random_line("blog_dialogue.txt", 1));
+	push(@sentences, $question);
 
+	# get text + base sentence tags
 	my $text = XML::LibXML->load_xml( string => "<base>" . $p->add_tags(join('', @sentences, $question)) . "</base>");
-	my $base_sentence = XML::LibXML->load_xml( string => "<base>" . $p->add_tags($sentences[6]) . "</base>" );
+	my $base_sentence = XML::LibXML->load_xml( string => "<base>" . $p->add_tags($sentences[2]) . "</base>" );
 
+	# making the sentence
 	my $answer = '';
 
 	foreach my $tag ($base_sentence->findnodes('/base/*')) {
@@ -98,6 +102,7 @@ sub generate_answer {
 
 		eval {
 			$word = $text->findnodes("/base/$nodeName")->[0]->to_literal();
+			delete $text->findnodes("/base/$nodeName")->[0];
 		};
 		if ($@) {
 			warn "Skipping word\n";

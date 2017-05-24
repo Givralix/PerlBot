@@ -9,6 +9,10 @@ use Data::Dumper;
 use JSON::XS;
 use HTML::Entities;
 use String::Markov;
+use Lingua::EN::Tagger;
+use XML::LibXML;
+srand;
+use File::Random qw/random_line/;
 
 use strict;
 use warnings;
@@ -26,6 +30,7 @@ use warnings;
 sub answer_asks
 {
 	my $blog = $_[0];
+	my $parser = $_[1];
 	my @submissions = @{$blog->posts_submission->{posts}};
 	open my $f, "<", "answered_asks_ids"
 		or die "Could not open file 'answered_asks_ids' $!";
@@ -50,7 +55,7 @@ sub answer_asks
 
 		my $answer = '';
 		while (42) {
-			$answer = generate_answer($question);
+			$answer = generate_answer($parser, $question);
 			unless($answer eq '') {
 				last; # break out
 			}
@@ -59,14 +64,14 @@ sub answer_asks
 		encode_entities($answer);
 		my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $question</b><br/><br/>$answer";
 		my $date = localtime();
-		if ( my $post = $blog->post( type => 'text', body => $body, tags => "answer,PerlBot,$submissions[$i]{asking_name}", ) ) {
+		if ( my $post = $blog->post( type => 'text', body => $body, tags => "answer,PerlBot,$submissions[$i]{asking_name}", state => "private", ) ) {
 			print "[$date] Following tumblr entry posted: $body\n";
 		} else {
 			print STDERR Dumper $blog->error;
 			die "[$date] Couldn't post following tumblr entry: $body";
 		}
 
-		open($f, '>>', "chat_database") or die "Could not open file 'chat_database' $!";
+		open($f, '>>', "blog_dialogue.txt") or die "Could not open file 'blog_dialogue.txt' $!";
 		say $f $submissions[$i]{question};
 		close $f;
 		open($f, '>>', "answered_asks_ids") or die "Could not open file 'answered_asks_ids' $!";
@@ -75,7 +80,7 @@ sub answer_asks
 	}
 }
 
-# generate_sentences
+# generate sentences
 sub generate_sentence {
 	my $markov = $_[0];
 	my %forbidden_sentences = %{$_[1]};
@@ -85,6 +90,46 @@ sub generate_sentence {
 		$sentence = $markov->generate_sample();
 	}
 	return $sentence;
+}
+
+# generate answers
+sub generate_answer {
+	my $p = $_[0]; # Lingua::EN::Tagger object
+	my $question = $_[1];
+
+	my @sentences = random_line("show_dialogue.txt", 3);
+	push(@sentences, random_line("blog_dialogue.txt", 1));
+	push(@sentences, $question);
+
+	# get text + base sentence tags
+	my $text = XML::LibXML->load_xml( string => "<base>" . $p->add_tags(join('', @sentences, $question)) . "</base>");
+	my $base_sentence = XML::LibXML->load_xml( string => "<base>" . $p->add_tags($sentences[2]) . "</base>" );
+
+	# making the sentence
+	my $answer = '';
+
+	foreach my $tag ($base_sentence->findnodes('/base/*')) {
+		my $nodeName = $tag->nodeName . "\n";
+		my $word = "";
+
+		eval {
+			$word = $text->findnodes("/base/$nodeName")->[0]->to_literal();
+			print Dumper(\$text->findnodes("/base/$nodeName"));
+            :q
+            :q
+            :q
+		};
+		if ($@) {
+			warn "Skipping word\n";
+		}
+		if ($answer eq '') {
+			$answer = $word;
+		} else {
+			$answer = $answer . " $word";
+		}
+	}
+
+	return $answer;
 }
 
 # reblogging posts (not in WWW::Tumblr so i have to make my own) (unused) (i need to fork WWW::Tumblr and add this)

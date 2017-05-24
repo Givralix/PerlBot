@@ -24,7 +24,7 @@ my $markov = String::Markov->new(
 		join_sep => ' ',
 		null => "\0",
 		stable => 1,
-		normalize => '',
+		do_normalize => '',
 		do_chomp => 1,
 );
 
@@ -50,7 +50,11 @@ my %forbidden_sentences;
 $forbidden_sentences{$_} = 1 for @show_dialogue;
 $forbidden_sentences{$_} = 1 for @blog_dialogue;
 
-for (0..107) {
+my $p = new Lingua::EN::Tagger;
+
+for (0..1) {
 	my $sentence = generate_sentence($markov, \%forbidden_sentences);
 	queue_post($blog, $sentence);
 }
+
+generate_answer($p, "text text text");
