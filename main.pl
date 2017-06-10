@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-require "perlbot.pl";
+require "./perlbot.pl";
 
 open my $f, "<", "tokens"
 	or die "Couldn't open token file: $!";
