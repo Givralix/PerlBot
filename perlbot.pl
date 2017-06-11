@@ -14,7 +14,7 @@ use XML::LibXML;
 srand;
 use File::Random qw/random_line/;
 
-use strict;
+#use strict;
 use warnings;
 # for the reblog function (unused)
 #my %request_params = (

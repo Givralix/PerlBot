@@ -37,14 +37,14 @@ use warnings;
 #my @submissions = @{$blog->posts_submission->{posts}};
 #print @submissions . "\n";
 my $markov = String::Markov->new(
-		order => 2,
-		sep => '',
-		split_sep => ' ',
-		join_sep => ' ',
-		null => "\0",
-		stable => 1,
-		do_normalize => undef,
-		do_chomp => 1,
+	order => 2,
+	sep => '',
+	split_sep => ' ',
+	join_sep => ' ',
+	null => "\0",
+	stable => 1,
+	normalize => "",
+	do_chomp => 1,
 );
 
 my @files = (
