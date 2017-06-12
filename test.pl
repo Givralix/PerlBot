@@ -1,6 +1,9 @@
 #!/usr/bin/perl
 require "./perlbot.pl";
 
+use strict;
+use warnings;
+
 my $p = new Lingua::EN::Tagger;
 
 @no_space = (
