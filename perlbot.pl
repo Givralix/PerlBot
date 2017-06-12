@@ -1,14 +1,15 @@
 #!/usr/bin/perl
 use utf8;
+binmode STDOUT, ':utf8';
 use Net::OAuth;
 $Net::OAuth::PROTOCOL_VERSION = Net::OAuth::PROTOCOL_VERSION_1_0A;
 use HTTP::Request::Common;
 use LWP::UserAgent;
-use WWW::Tumblr;
 use Data::Dumper;
 use JSON::XS;
 use HTML::Entities;
 use String::Markov;
+use WWW::Tumblr;
 use Lingua::EN::Tagger;
 use XML::LibXML;
 srand;
@@ -96,10 +97,16 @@ sub generate_sentence {
 sub generate_answer {
 	my $p = $_[0]; # Lingua::EN::Tagger object
 	my $question = $_[1];
+	# hash containing punctuation that doesn't require a space before it
+	my @no_space = @{$_[2]};
 
 	my @sentences = random_line("show_dialogue.txt", 3);
 	push(@sentences, random_line("blog_dialogue.txt", 1));
 	push(@sentences, $question);
+
+	foreach (@sentences) {
+		$_ =~ s/[<>]//g;
+	}
 
 	# get text + base sentence tags
 	my $text = XML::LibXML->load_xml( string => "<base>" . $p->add_tags(join('', @sentences, $question)) . "</base>");
@@ -114,15 +121,19 @@ sub generate_answer {
 
 		eval {
 			$word = $text->findnodes("/base/$nodeName")->[0]->to_literal();
-			delete $text->findnodes("/base/$nodeName");
+			# delete the node
+			$text->findnodes("/base/$nodeName")->[0]->unbindNode();
 		};
 		if ($@) {
 			warn "Skipping word\n";
-		}
-		if ($answer eq '') {
-			$answer = $word;
 		} else {
-			$answer = $answer . " $word";
+			if ($answer eq '') {
+				$answer = $word;
+			} elsif ($word ~~ @no_space) {
+				$answer = $answer . $word;
+			} elsif (!$word eq '') {
+				$answer = $answer . " $word";
+			}
 		}
 	}
 
@@ -186,5 +197,4 @@ sub queue_post {
 	}
 }
 
-#answer_asks($blog);
 1;
