@@ -6,7 +6,7 @@ use warnings;
 
 my $p = new Lingua::EN::Tagger;
 
-@no_space = (
+my @no_space = (
 	",",
 	".",
 	";",
