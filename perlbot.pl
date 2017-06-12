@@ -31,7 +31,17 @@ use warnings;
 sub answer_asks
 {
 	my $blog = $_[0];
-	my $parser = $_[1];
+	my $parser = new Lingua::EN::Tagger;
+	my @no_space = (
+		",",
+		".",
+		";",
+		"?",
+		"!",
+		"...",
+		"n't",
+		"'",
+	);
 	my @submissions = @{$blog->posts_submission->{posts}};
 	open my $f, "<", "answered_asks_ids"
 		or die "Could not open file 'answered_asks_ids' $!";
@@ -45,7 +55,7 @@ sub answer_asks
 		print "\nAsk #$submissions[$i]{id} sent by $submissions[$i]{asking_name} at $submissions[$i]{date}:\n$submissions[$i]{question}\n";
 
 		# checking if the ask was already answered
-		if (exists($previous_ids_hash{$submissions[$i]{id}})) {
+		if ($submissions[$i]{id} ~~ @previous_ids) {
 			print "Already answered.\n";
 			next;
 		}
@@ -54,13 +64,8 @@ sub answer_asks
 		# make the question html safe
 		encode_entities($question);
 
-		my $answer = '';
-		while (42) {
-			$answer = generate_answer($parser, $question);
-			unless($answer eq '') {
-				last; # break out
-			}
-		}
+		my $answer = generate_answer($parser, $question, \@no_space);
+
 		# make the answer html safe
 		encode_entities($answer);
 		my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $question</b><br/><br/>$answer";

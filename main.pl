@@ -53,7 +53,20 @@ $forbidden_sentences{$_} = 1 for @blog_dialogue;
 
 my $p = new Lingua::EN::Tagger;
 
+my @no_space = (
+	",",
+	".",
+	";",
+	"?",
+	"!",
+	"...",
+	"n't",
+	"'",
+);
+
 for (0..1) {
 	my $sentence = generate_sentence($markov, \%forbidden_sentences);
 	queue_post($blog, $sentence);
 }
+
+answer_asks($blog);
