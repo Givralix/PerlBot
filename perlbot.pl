@@ -100,9 +100,9 @@ sub generate_answer {
 	# hash containing punctuation that doesn't require a space before it
 	my @no_space = @{$_[2]};
 
-	my @sentences = random_line("show_dialogue.txt", 3);
+	my @sentences = ($question,);
+	push(@sentences, random_line("show_dialogue.txt", 3));
 	push(@sentences, random_line("blog_dialogue.txt", 1));
-	push(@sentences, $question);
 
 	foreach (@sentences) {
 		$_ =~ s/[<>]//g;
@@ -119,14 +119,11 @@ sub generate_answer {
 		my $nodeName = $tag->nodeName . "\n";
 		my $word = "";
 
-		eval {
-			$word = $text->findnodes("/base/$nodeName")->[0]->to_literal();
+		if (my $node = $text->findnodes("/base/$nodeName")->[0]) {
+			$word = $node->to_literal();
 			# delete the node
-			$text->findnodes("/base/$nodeName")->[0]->unbindNode();
-		};
-		if ($@) {
-			warn "Skipping word\n";
-		} else {
+			$node->unbindNode();
+			# join the answer and the new word
 			if ($answer eq '') {
 				$answer = $word;
 			} elsif ($word ~~ @no_space) {
@@ -134,6 +131,8 @@ sub generate_answer {
 			} elsif (!$word eq '') {
 				$answer = $answer . " $word";
 			}
+		} else {
+			warn "Skipping word\n";
 		}
 	}
 
