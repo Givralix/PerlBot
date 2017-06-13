@@ -1,6 +1,8 @@
 # PerlBot
-This is a tumblr bot mainly written in Perl (and some Python)! So far it's not complete at all but I'm working on it.<br/>
-It's based on Pearl from Steven Universe :D<br/>
+This is a Tumblr bot written in Perl! So far it's not complete but I'm working on it
+
+It's based on Pearl from Steven Universe.
+
 The blog is at [http://perlbot.tumblr.com/](http://perlbot.tumblr.com/)
 
 ## Branches
