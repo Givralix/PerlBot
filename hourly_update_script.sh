@@ -5,8 +5,7 @@
 
 cd /home/bismuth/PerlBot
 git pull
-perl perlbot.pl
-cd /home/bismuth/PerlBot
-git add chat_database answered_asks_ids
-git commit -m "updated chat_database and answered_asks_ids"
+perl main.pl
+git add blog_dialogue.txt
+git commit -m "updated blog_dialogue.txt"
 git push

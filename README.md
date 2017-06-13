@@ -6,50 +6,53 @@ The blog is at [http://perlbot.tumblr.com/](http://perlbot.tumblr.com/)
 ## Branches
 ### master
 This branch is stable and has the code I use for posting posts most of the time
-### new_stuff
-This branch isn't stable at all, I use it to test stuff so the code isn't usable for the blog
 
 ## Files
 ### perlbot.pl
-This is basically most of the code for the bot.<br/>
-Since there's no official Tumblr API for Perl, I got the code for posting text posts from [this person](https://txlab.wordpress.com/2011/09/03/using-tumblr-api-v2-from-perl/#comment-7004) (which thankfully works).<br/>
-(the official Tumblr API documentation is also very useful!)</br>
-For obvious reasons I removed the OAuth parameters from the code (they're in a text file named "tokens", using a ";" as separation).<br/>
-Now actually works \o/
+All the functions for perlbot.
 
-### shitpost_database
-This is all the dialogue that Pearl ever says for the Markov Chain to generate sentences from.<br/>
-So far it has the dialogue from all the episodes from Gem Glow to Know Your Fusion.<br/>
-I get it from the Steven Universe wikia and also each sentence is on its own line!
+There is no official Tumblr API for Perl, but there is WWW::Tumblr, which I use.
 
-### chat_database
-All the messages Perlbot got from the internet
+(the official Tumblr API documentation is also very useful!)
 
-### trying.py
-Trying to make something that can generate answers from an answer (not to be used)
+### main.pl
+This script calls the functions written in perlbot.pl to queue posts and answer asks.
+
+For obvious reasons, I removed the OAuth parameters from the code (they're stored in environment variables).
+
+### show_dialogue.txt
+This is all the dialogue that Pearl ever says for the Markov Chain to generate sentences from.
+
+So far it has the dialogue from all the episodes from Gem Glow to Lars' Head.
+
+I get it from the Steven Universe wikia and each sentence is on its own line.
+
+### blog_dialogue.txt
+All the messages Perlbot got from the blog
 
 ### answered\_asks\_ids
-The ids of asks that were already answered (since I don't know how to remove them from the inbox)
+The ids of asks that were already answered (since I don't know how to remove them from the inbox) (soon to be unused)
 
 ### hourly\_update\_script.sh
-The script that is run hourly.<br/>
+The script that is run hourly.
+
 It:
 1.	Fetches the remote repository & merges
-2.	Runs perlbot.pl
-3.	Makes a commit of chat_database, answered\_asks\_ids and log
-4.	Pushes it
+2.	Runs main.pl
+3.	Makes a commit of blog_dialogue.txt
+4.	Pushes it to Github
 
 ## Dependencies
-### Python
-*	Markovify
-*	TextBlob
-
 ### Perl
 *	utf8
 *	Net::OAuth
 *	HTTP::Request::Common
 *	LWP::UserAgent
-*	JSON::XS
 *	WWW::Tumblr
 *	Inline::Python
 *	Data::Dumper
+*	HTML::Entities
+*	String::Markov
+*	Lingua::EN::Tagger
+*	XML::LibXML
+*	File::Random
