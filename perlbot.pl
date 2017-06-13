@@ -32,56 +32,50 @@ sub answer_asks
 {
 	my $blog = $_[0];
 	my $parser = new Lingua::EN::Tagger;
-	my @no_space = (
-		",",
-		".",
-		";",
-		"?",
-		"!",
-		"...",
-		"n't",
-		"'",
+	my @no_space = (",", ".", ";", "?", "!", "...", "'",);
+
+	my %request_params = (
+		'consumer_key' => $ENV{OAUTH_CONSUMER_KEY},
+		'consumer_secret' => $ENV{OAUTH_CONSUMER_SECRET},
+		'token' => $ENV{OAUTH_TOKEN},
+		'token_secret' => $ENV{OAUTH_TOKEN_SECRET},
+		'signature_method' => 'HMAC-SHA1',
 	);
-	my @submissions = @{$blog->posts_submission->{posts}};
+
 	open my $f, "<", "answered_asks_ids"
 		or die "Could not open file 'answered_asks_ids' $!";
 	my @previous_ids = <$f>;
-	for (my $i = 0 ; $i <= $#previous_ids ; $i++) {
-		chop($previous_ids[$i]);
+	foreach my $id (@previous_ids) {
+		chomp($id);
 	}
 	close $f;
-	my %previous_ids_hash = map { $_ => 1 } @previous_ids;
-	for (my $i = 0 ; $i <= $#submissions ; $i++) {
-		print "\nAsk #$submissions[$i]{id} sent by $submissions[$i]{asking_name} at $submissions[$i]{date}:\n$submissions[$i]{question}\n";
+	
+	my @submissions = @{$blog->posts_submission->{posts}};
+	foreach my $ask (@submissions) {
+		print "\nAsk #$ask->{id} sent by $ask->{asking_name} at $ask->{date}:\n$ask->{question}\n";
 
 		# checking if the ask was already answered
-		if ($submissions[$i]{id} ~~ @previous_ids) {
+		if ($ask->{id} ~~ @previous_ids) {
 			print "Already answered.\n";
 			next;
 		}
 
-		my $question = $submissions[$i]{question};
-		# make the question html safe
-		encode_entities($question);
-
-		my $answer = generate_answer($parser, $question, \@no_space);
-
+		my $answer = generate_answer($parser, $ask->{question}, \@no_space);
 		# make the answer html safe
 		encode_entities($answer);
-		my $body = "<b><a spellcheck=\"false\" class=\"tumblelog\">\@$submissions[$i]{asking_name}</a>: $question</b><br/><br/>$answer";
-		my $date = localtime();
-		if ( my $post = $blog->post( type => 'text', body => $body, tags => "answer,PerlBot,$submissions[$i]{asking_name}", state => "private", ) ) {
-			print "[$date] Following tumblr entry posted: $body\n";
-		} else {
-			print STDERR Dumper $blog->error;
-			die "[$date] Couldn't post following tumblr entry: $body";
-		}
 
+		# edit the ask to add the answer and turn it into a published post
+		edit(
+			$answer,
+			$ask->{id},
+			"answer,$ask->{asking_name}",
+			"published",
+			\%request_params,
+		);
+
+		# add the content of the ask to blog_dialogue.txt
 		open($f, '>>', "blog_dialogue.txt") or die "Could not open file 'blog_dialogue.txt' $!";
-		say $f $submissions[$i]{question};
-		close $f;
-		open($f, '>>', "answered_asks_ids") or die "Could not open file 'answered_asks_ids' $!";
-		say $f $submissions[$i]{id};
+		say $f $ask->{question};
 		close $f;
 	}
 }
@@ -89,9 +83,9 @@ sub answer_asks
 # generate sentences
 sub generate_sentence {
 	my $markov = $_[0];
-	my %forbidden_sentences = %{$_[1]};
+	my @sentences = @{$_[1]};
 	my $sentence = $markov->generate_sample();
-	while ( $forbidden_sentences{$sentence} ) {
+	while ( $sentence ~~ @sentences) {
 		#print $sentence . "\n";
 		$sentence = $markov->generate_sample();
 	}
@@ -145,47 +139,93 @@ sub generate_answer {
 }
 
 # reblogging posts (not in WWW::Tumblr so i have to make my own) (unused) (i need to fork WWW::Tumblr and add this)
-#sub reblog {
-#	my $type = $_[1];
-#	my $comment = $_[2];
-#	my $id = $_[3];
-#	my $reblog_key = $_[4];
-#	my $tags = $_[5];
-#	my $request_params = %{ $_[6] };
-#	utf8::decode($comment);
-#	my $request =
-#		Net::OAuth->request("protected resource")->new
-#			(request_url => 'http://api.tumblr.com/v2/blog/perlbot/post/reblog',
-#			%request_params,
-#			timestamp => time(),
-#			nonce => rand(1000000),
-#			request_method => 'POST',
-#			extra_params => {
-#				'type' => $type,
-#				'comment' => $comment,
-#				'tags' => $tags,
-#				'id' => $id,
-#				'reblog_key' => $reblog_key,
-#		},);
-#	print Dumper($request) . "\n";
-#	$request->sign;
-#	my $ua = LWP::UserAgent->new;
-#	my $response = $ua->request(POST 'http://api.tumblr.com/v2/blog/perlbot/post/reblog', Content => $request->to_post_body);
-#	my $date = localtime();
-#	if ( $response->is_success ) {
-#		my $r = decode_json($response->content);
-#		if($r->{'meta'}{'status'} == 201) {
-#			print "[$date] Successfully reblogged and added: $comment\n";
-#		} else {
-#			printf("[$date] Couldn't reblog: %s\n",
-#				$r->{'meta'}{'msg'});
-#		}
-#	} else {
-#	printf("[$date] Couldn't reblog: %s\n",
-#			$response->as_string);
-#	}
-#	return;
-#}
+sub reblog {
+	my $type           = $_[0];
+	my $comment        = $_[1];
+	my $id             = $_[2];
+	my $reblog_key     = $_[3];
+	my $tags           = $_[4];
+	my $state          = $_[5];
+	my %request_params = %{ $_[6] };
+	utf8::decode($comment);
+	my $request = Net::OAuth->request("protected resource")->new (
+		request_url => 'http://api.tumblr.com/v2/blog/perlbot/post/reblog',
+		%request_params,
+		timestamp => time(),
+		nonce => rand(1000000),
+		request_method => 'POST',
+		extra_params => {
+			type       => $type,
+			comment    => $comment,
+			tags       => $tags,
+			id         => $id,
+			reblog_key => $reblog_key,
+			state      => $state,
+		},
+	);
+	print Dumper $request;
+	$request->sign;
+	my $ua = LWP::UserAgent->new;
+	my $response = $ua->request(POST 'http://api.tumblr.com/v2/blog/perlbot/post/reblog', Content => $request->to_post_body);
+	my $date = localtime();
+	if ( $response->is_success ) {
+		my $r = decode_json($response->content);
+		if($r->{'meta'}{'status'} == 201) {
+			print "[$date] Successfully reblogged and added: $comment\n";
+			return 1;
+		} else {
+			printf("[$date] Couldn't reblog: %s\n",
+				$r->{'meta'}{'msg'});
+		}
+	} else {
+		printf("[$date] Couldn't reblog: %s\n",
+			$response->as_string);
+	}
+	return 0;
+}
+
+# editing posts (not in WWW::Tumblr so i have to make my own) (i need to fork WWW::Tumblr and add this)
+sub edit
+{
+	my $answer         = $_[0];
+	my $id             = $_[1];
+	my $tags           = $_[2];
+	my $state          = $_[3];
+	my %request_params = %{ $_[4] };
+	utf8::decode($answer);
+	my $request = Net::OAuth->request("protected resource")->new (
+		request_url => 'http://api.tumblr.com/v2/blog/perlbot/post/edit',
+		%request_params,
+		timestamp => time(),
+		nonce => rand(1000000),
+		request_method => 'POST',
+		extra_params => {
+			answer     => $answer,
+			tags       => $tags,
+			id         => $id,
+			state      => $state,
+		},
+	);
+	print Dumper $request;
+	$request->sign;
+	my $ua = LWP::UserAgent->new;
+	my $response = $ua->request(POST 'http://api.tumblr.com/v2/blog/perlbot/post/edit', Content => $request->to_post_body);
+	my $date = localtime();
+	if ( $response->is_success ) {
+		my $r = decode_json($response->content);
+		if($r->{'meta'}{'status'} == 201) {
+			print "[$date] Successfully edited: $answer\n";
+			return 1;
+		} else {
+			printf("[$date] Couldn't edit: %s\n",
+				$r->{'meta'}{'msg'});
+		}
+	} else {
+		printf("[$date] Couldn't edit: %s\n",
+			$response->as_string);
+	}
+	return 0;
+}
 
 # queue a post generated by generate_sentence()
 sub queue_post {
