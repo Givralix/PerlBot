@@ -27,16 +27,16 @@ my @files = (
 	"blog_dialogue.txt",
 );
 
-$markov->add_files(@files);
+my @dialogue = ();
 
-open $f, $files[0] or die "couldn't open 'show_dialogue.txt': $!";
-my @dialogue = <$f>;
-close FILE;
+foreach (@files) {
+	open FILE, $_ or die "couldn't open '$_': $!";
+	binmode(FILE, ":utf8");
+	push(@dialogue, <FILE>);
+	close FILE;
+}
 
-open $f, $files[1] or die "couldn't open 'blog_dialogue.txt': $!";
-push(@dialogue, <$f>);
-close FILE;
-chomp(@dialogue);
+foreach (@dialogue) { $markov->add_sample($_) }
 
 for (0..1) {
 	my $sentence = generate_sentence($markov, \@dialogue);
