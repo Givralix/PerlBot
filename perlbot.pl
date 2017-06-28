@@ -74,9 +74,9 @@ sub answer_asks
 # generate sentences
 sub generate_sentence {
 	my $markov = $_[0];
-	my @sentences = @{$_[1]};
+	my %sentences = %{$_[1]};
 	my $sentence = $markov->generate_sample();
-	while ( $sentence ~~ @sentences) {
+	while ( exists($sentences{$sentence}) ) {
 		#print $sentence . "\n";
 		$sentence = $markov->generate_sample();
 	}

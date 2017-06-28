@@ -38,8 +38,11 @@ foreach (@files) {
 
 foreach (@dialogue) { $markov->add_sample($_) }
 
+my %forbidden_sentences;
+$forbidden_sentences{$_} = 1 for @dialogue;
+
 for (0..1) {
-	my $sentence = generate_sentence($markov, \@dialogue);
+	my $sentence = generate_sentence($markov, \%forbidden_sentences);
 	queue_post($blog, $sentence);
 }
 
