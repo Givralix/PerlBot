@@ -36,7 +36,6 @@ sub answer_asks
 	close $f;
 	
 	my @submissions = @{$blog->posts_submission->{posts}};
-	print Dumper @submissions;
 	foreach my $ask (@submissions) {
 		answer_ask($ask, $blog, $parser, \@no_space);
 	}
