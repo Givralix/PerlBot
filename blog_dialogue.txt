@@ -804,3 +804,4 @@ You're making proper sentences now! I'm so proud!!
 I love you!
 love me daddy pearl
 :3
+"ask perlbot a question"
